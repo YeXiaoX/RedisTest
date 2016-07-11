@@ -34,13 +34,17 @@ public class RedisJava {
         //StringRedisTemplate只支持string类型
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate(jedisConnectionFactory());
         RedisBaseCacheDao rbc = new RedisBaseCacheDao(stringRedisTemplate);
-        rbc.setScore("402", "ss", 22.0);
-        rbc.setScore("402", "ss1", 23.0);
-        rbc.setScore("402", "ss2", 2.0);
-        rbc.setScore("402", "ss3", 32.0);
-        rbc.setScore("402", "ss4", 12.0);
+        //rbc.addStrValue("402","ss");
 
-        Map<String, Double> map = rbc.getTopMembers("402", 3l);//按一定顺序获取前三名数据
+        rbc.setScore("403", "ss", 22.0);
+        rbc.setScore("403", "ss1", 23.0);
+        rbc.setScore("403", "ss2", 2.0);
+        rbc.setScore("403", "ss3", 32.0);
+        rbc.setScore("403", "ss4", 12.0);
+        System.out.println("test get:"+rbc.getTopMembers("405",1l).size());
+
+        //stringRedisTemplate.opsForSet().members()
+        Map<String, Double> map = rbc.getTopMembers("403", -1l);//按一定顺序获取前三名数据
         List<SortedSetModel> list = new ArrayList<SortedSetModel>();
         for (Map.Entry<String, Double> entry : map.entrySet()) {
             SortedSetModel ssm = new SortedSetModel();
@@ -87,7 +91,7 @@ boundHashOps(K)	BoundHashOperations 	以绑定指定key的方式，操作具有h
 //        list2.set(0l, "2");//set操作是根据索引改变值
 //        list2.rightPush("3");//在其后添加一个值，也可以在链表的前面加一个值
 //        list2.rightPush("4");
-        List<Object> list1 = redisTemplate.opsForList().range("number", 0l, 8l);
+        List<Object> list1 = redisTemplate.opsForList().range("number", 0l, -1l);
         for (Object o : list1) {
             System.out.println(o);
         }
@@ -97,12 +101,18 @@ boundHashOps(K)	BoundHashOperations 	以绑定指定key的方式，操作具有h
         students.put("name","yingzheng");
         students.put("age",38);
         students.put("gender",true);
+        students.put("","");
         hashOperations.put("student","001","ssd");
         hashOperations.put("student","002","ssd1");
         hashOperations.put("student","003",students);
         Map<String,Object>map1=hashOperations.entries("student");
         for(Map.Entry<String,Object> entry:map1.entrySet()){
             System.out.println(entry.getKey()+":"+entry.getValue());
+        }
+
+        List<String> test=null;
+        for(String s:test){
+            System.out.println("test");
         }
 
     }
