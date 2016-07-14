@@ -6,6 +6,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.*;
 
@@ -19,6 +20,23 @@ public class RedisJava {
         JedisConnectionFactory jedisConnetionFactory = (JedisConnectionFactory) ctx
                 .getBean("connectionFactory");
         return jedisConnetionFactory;
+    }
+
+    //代码中配置去连redis
+    public static RedisConnectionFactory jedisConnectionFactory1() {
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxIdle(300);
+        config.setMaxActive(600);
+        config.setMaxWait(1000);
+        config.setTestOnBorrow(true);
+        config.setTestWhileIdle(true);
+        jedisConnectionFactory.setHostName("127.0.0.1");
+        jedisConnectionFactory.setPort(6379);
+        jedisConnectionFactory.setPassword(null);
+        jedisConnectionFactory.setPoolConfig(config);
+        jedisConnectionFactory.afterPropertiesSet();
+        return jedisConnectionFactory;
     }
 
     public static void main(String[] args) {
